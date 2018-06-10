@@ -1,0 +1,5 @@
+del .\*.o .\*.exe
+del .\ac\*.o .\ac\*.exe 
+del .\other_ac\*.o .\other_ac\*.exe 
+del .\unsolved\*.o .\unsolved\*.exe
+del .\ac_2\*.o .\ac_2\*.exe
