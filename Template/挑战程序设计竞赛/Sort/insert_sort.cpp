@@ -26,6 +26,7 @@ int main()
     }
     --num;
 
+
     for (int i = 0; i < num-1; i++) {
         int v = data[i];
         int j = i - 1;
