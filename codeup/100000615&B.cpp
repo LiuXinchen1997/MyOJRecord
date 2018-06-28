@@ -1,5 +1,3 @@
-/// WA :-(
-
 #include <stdio.h>
 
 #define N 1005
@@ -20,6 +18,7 @@ int find_f(int i)
     if (f[i] != i) {
         f[i] = find_f(f[i]);
     }
+
     return f[i];
 }
 
@@ -40,40 +39,26 @@ void union_set(int a, int b)
 int main()
 {
     int n, m;
-    while (~scanf("%d %d", &n, &m)) {
-        if (n == 0 && m == 0) {
-            break;
-        }
-
-        if (m > n - 1) {
-            int a, b;
-            for (int i = 1; i <= m; i++) {
-                scanf("%d %d", &a, &b);
-            }
-            printf("No\n");
-            continue;
-        }
+    while (~scanf("%d", &n)) {
+        if (0 == n) { break; }
+        scanf(" %d", &m);
 
         make_set(n);
-
         for (int i = 1; i <= m; i++) {
             int a, b;
-            scanf("%d %d", &a, &b);
-            union_set(a, b);
+            scanf(" %d %d", &a, &b);
+            int f_a = find_f(a);
+            int f_b = find_f(b);
+
+            if (f_a != f_b) { union_set(a, b); }
         }
 
-        int ans = 0;
+        int cnt = 0;
         for (int i = 1; i <= n; i++) {
-            if (f[i] == i) {
-                ans += 1;
-            }
+            if (f[i] == i) { cnt++; }
         }
 
-        if (ans == 1) {
-            printf("Yes\n");
-        } else {
-            printf("No\n");
-        }
+        printf("%d\n", cnt-1);
     }
 
     return 0;
