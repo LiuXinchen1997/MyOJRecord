@@ -1,11 +1,11 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <map>
 #include <string>
 
 using namespace std;
 
-map<string, int> str2int; // Ãû³Æ-->±àºÅ
-map<int, string> int2str; // ±àºÅ-->Ãû³Æ
+map<string, int> str2int; // åç§°-->ç¼–å·
+map<int, string> int2str; // ç¼–å·-->åç§°
 
 map<string, int> gangs; // Head-->num of gang
 
@@ -13,7 +13,7 @@ map<string, int> gangs; // Head-->num of gang
 #define MAXN 2010
 
 int graph[MAXN][MAXN] = {0};
-int weight[MAXN] = {0}; /// ÓÃÓÚÕÒµ½µãÈ¨×î´óµÄ±ß
+int weight[MAXN] = {0}; /// ç”¨äºæ‰¾åˆ°ç‚¹æƒæœ€å¤§çš„è¾¹
 int numPerson = 0;
 bool visited[MAXN] = {false};
 
@@ -37,7 +37,7 @@ void dfs(int nowVisit, int& numOfGang, int& head, int& sumWeight)
     }
 
     for (int i = 0; i < numPerson; i++) {
-        if (graph[nowVisit][i] > 0) { /// ÕâÀïĞèÒª¿¼ÂÇÓĞ»·µÄÇé¿ö
+        if (graph[nowVisit][i] > 0) { /// è¿™é‡Œéœ€è¦è€ƒè™‘æœ‰ç¯çš„æƒ…å†µ
             sumWeight += graph[nowVisit][i];
             graph[nowVisit][i] = 0; graph[i][nowVisit] = 0;
             if (!visited[i]) {
@@ -47,7 +47,7 @@ void dfs(int nowVisit, int& numOfGang, int& head, int& sumWeight)
     }
 }
 
-void dfs_travel(int k) /// ãĞÖµk
+void dfs_travel(int k) /// é˜ˆå€¼k
 {
     for (int i = 0; i < numPerson; i++) {
         if (!visited[i]) {

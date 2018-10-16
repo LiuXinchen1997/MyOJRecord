@@ -52,6 +52,5 @@ int main()
         pq.pop();
     }
 
-
     return 0;
 }

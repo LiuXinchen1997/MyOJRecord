@@ -30,7 +30,7 @@ void init()
 
 int main()
 {
-    // ifstream infile("dataforA1003.txt");
+    // ifstream infile("A1003data.txt");
     // infile >> n >> m;
     cin >> n >> m;
     init();

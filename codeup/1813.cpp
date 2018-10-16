@@ -11,7 +11,7 @@ int d[MAXN];
 bool visited[MAXN];
 int p[MAXN];
 int n, m;
-// ifstream infile("datafor1813.txt");
+// ifstream infile("1813data.txt");
 
 void init()
 {

@@ -18,7 +18,7 @@ int numPerson = 0;
 
 int register_name(string name)
 {
-    if (str2int.find(name) != str2int.end()) { /// ÒÑ¾­´æÔÚ
+    if (str2int.find(name) != str2int.end()) { /// ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
         return str2int[name];
     } else {
         str2int[name] = numPerson;
@@ -35,7 +35,7 @@ void dfs(int nowVisit, int& head, int& numOfGang, int& sumWeight)
 
     for (int i = 0; i < numPerson; i++) {
         if (graph[nowVisit][i] > 0) {
-            sumWeight += graph[nowVisit][i]; /// ÕâÑù×öÊÇÎªÁË°ÑÓÐ»·µÄ±ßÒ²¼ÓÉÏ
+            sumWeight += graph[nowVisit][i]; /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Ë°ï¿½ï¿½Ð»ï¿½ï¿½Ä±ï¿½Ò²ï¿½ï¿½ï¿½ï¿½
             graph[nowVisit][i] = 0; graph[i][nowVisit] = 0;
             if (!visited[i]) {
                 dfs(i, head, numOfGang, sumWeight);
@@ -61,7 +61,7 @@ void dfs_travel(int k)
 int main()
 {
     int n, k;
-    // ifstream infile("dataforA1034.txt");
+    // ifstream infile("A1034data.txt");
     // infile >> n >> k;
     cin >> n >> k;
 
@@ -75,7 +75,7 @@ int main()
         weight[id1] += len; weight[id2] += len;
     }
 
-    // ¿ªÊ¼ÉîËÑ
+    // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
     dfs_travel(k);
 
     cout << gangs.size() << endl;
