@@ -10,7 +10,7 @@
 
 1. easy
 
-2. medium
+2. medium: 55, 56, 61
 
 3. hard
 
@@ -18,7 +18,7 @@
 
 1. easy
 
-2. medium: 48
+2. medium: 48, 49, 54
 
 3. hard
 
@@ -26,6 +26,6 @@
 
 1. easy
 
-2. medium: 40, 47
+2. medium: 40, 47, 50(迭代法), 60
 
 3. hard
