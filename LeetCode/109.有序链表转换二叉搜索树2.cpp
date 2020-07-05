@@ -23,36 +23,29 @@
  * };
  */
 class Solution {
-private:
-    ListNode* head;
-
 public:
-    TreeNode* buildTree(int l, int r) {
+    TreeNode* buildTree(vector<int>& arr, int l, int r) {
         if (l > r) { return NULL; }
+        
+        int mid = (l + r) / 2;
+        TreeNode* root = new TreeNode(arr[mid]);
+        root->left = buildTree(arr, l, mid-1);
+        root->right = buildTree(arr, mid+1, r);
 
-        int mid = (l+r) / 2;
-        TreeNode* left = buildTree(l, mid-1);
-
-        TreeNode* root = new TreeNode(this->head->val);
-        root->left = left;
-        this->head = this->head->next;
-
-        root->right = buildTree(mid+1, r);
         return root;
     }
 
     TreeNode* sortedListToBST(ListNode* head) {
         if (!head) { return NULL; }
 
-        int size = 0;
+        vector<int> arr;
         ListNode* cur = head;
         while (cur) {
-            size += 1;
+            arr.push_back(cur->val);
             cur = cur->next;
         }
 
-        this->head = head;
-        TreeNode* root = buildTree(0, size-1);
+        TreeNode* root = buildTree(arr, 0, arr.size()-1);
         return root;
     }
 };
