@@ -24,9 +24,10 @@ public:
 
             TreeNode* leftTree = root->left;
             TreeNode* rightTree = root->right;
+            root->left = nullptr;
             root->right = leftTree;
 
-            TreeNode* tmp = root;
+            TreeNode* tmp = leftTree;
             while (tmp->right) { tmp = tmp->right; }
             tmp->right = rightTree;
 
