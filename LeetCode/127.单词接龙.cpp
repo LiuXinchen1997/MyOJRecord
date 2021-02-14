@@ -7,46 +7,65 @@
 // @lc code=start
 class Solution {
 public:
-    void update_state2word(vector<string>& wordList, map<string, vector<string>>& state2word) {
-        for (string word : wordList) {
-            for (int i = 0; i < word.size(); i++) {
-                string state = word.substr(0, i) + string("*") + word.substr(i+1, string::npos);
-                if (state2word.count(state) == 0) {
-                    state2word[state] = vector<string>();
-                }
-                state2word[state].push_back(word);
-            }
+    int num_node = 0;
+    map<string, int> word2id;
+    vector<vector<int> > graph;
+
+    void add_word(string& word) {
+        if (word2id.count(word) == 0) {
+            word2id[word] = num_node++;
+            graph.emplace_back();
         }
     }
 
+    void add_edge(string& word) {
+        if (word2id.count(word) != 0) {
+            return;
+        }
+
+        add_word(word);
+        int id1 = word2id[word];
+        for (int i = 0; i < word.size(); i++) {
+            string state = word.substr(0, i) + '*' + word.substr(i+1, string::npos);
+            add_word(state);
+            int id2 = word2id[state];
+            graph[id1].push_back(id2);
+            graph[id2].push_back(id1);
+        }
+    }
+
+    void build_graph(string& beginWord, vector<string>& wordList) {
+        for (string word : wordList) { add_edge(word); }
+        add_edge(beginWord);
+    }
+
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        map<string, vector<string>> state2word;
-        update_state2word(wordList, state2word);
+        build_graph(beginWord, wordList);
+        if (word2id.count(endWord) == 0) { return 0; }
+        
+        int begin_id = word2id[beginWord];
+        int end_id = word2id[endWord];
 
-        queue<string> qs;
-        queue<int> qi;
-        qs.push(beginWord);
-        qi.push(1);
+        queue<int> q;
+        queue<int> dists;
+        vector<bool> visited(num_node, false);
+        q.push(begin_id);
+        dists.push(0);
+        visited[begin_id] = true;
+        while (true) {
+            int cur_id = q.front(); q.pop();
+            int cur_dist = dists.front(); dists.pop();
 
-        map<string, bool> visited;
-        for (string word : wordList) { visited[word] = false; }
-
-        while (!qs.empty()) {
-            string curWord = qs.front(); qs.pop();
-            int curLen = qi.front(); qi.pop();
-            if (curWord == endWord) { return curLen; }
-
-            for (int i = 0; i < curWord.size(); i++) {
-                string cur_state = curWord.substr(0, i) + string("*") + curWord.substr(i+1, string::npos);
-                vector<string> candidateWordList = state2word[cur_state];
-                for (string candidateWord : candidateWordList) {
-                    if (candidateWord != curWord && !visited[candidateWord]) {
-                        visited[candidateWord] = true;
-                        qs.push(candidateWord);
-                        qi.push(curLen + 1);
-                    }
+            for (int id : graph[cur_id]) {
+                if (id == end_id) { return (cur_dist + 1) / 2 + 1; }
+                if (!visited[id]) {
+                    q.push(id);
+                    dists.push(cur_dist + 1);
+                    visited[id] = true;
                 }
             }
+
+            if (q.empty()) { break; }
         }
 
         return 0;
