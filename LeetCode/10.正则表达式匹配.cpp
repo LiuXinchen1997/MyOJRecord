@@ -7,47 +7,36 @@
 // @lc code=start
 class Solution {
 public:
-    // 没有好方法处理".*"的情况！！！
     bool isMatch(string s, string p) {
-        int i1 = 0, i2 = 0;
-        while (1) {
-            if (i1 >= s.size() || i2 >= p.size()) { break; }
+        int m = s.size();
+        int n = p.size();
 
-            if (p[i2] >= 'a' && p[i2] <= 'z' && i2+1 < p.size() && p[i2+1] == '*') {
-                char ch = p[i2];
-                i2 += 1;
-                int count_in_s = 0;
-                while (i1 + count_in_s < s.size() && s[i1 + count_in_s] == ch) {
-                    count_in_s += 1;
+        vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
+        dp[0][0] = true;
+
+        for (int i = 0; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (p[j-1] != '*') { // 第j个字符
+                    if (i == 0) { continue; }
+                    if (matches(s[i-1], p[j-1])) {
+                        dp[i][j] = dp[i-1][j-1];
+                    }
+                } else {
+                    dp[i][j] = dp[i][j-2];
+                    if (i == 0) { continue; }
+                    if (matches(s[i-1], p[j-2])) {
+                        dp[i][j] = (dp[i-1][j] || dp[i][j-2]);
+                    }
                 }
-
-                int count_in_p = 0;
-                while (i2 + count_in_p + 1 < p.size() && p[i2+count_in_p+1] == ch) {
-                    count_in_p += 1;
-                }
-
-                i2 += count_in_p + 1;
-                i1 += count_in_s;
-                continue;
-            }
-
-            if (p[i2] == '.') {
-                i2 += 1;
-                i1 += 1;
-                continue;
-            }
-
-            if (p[i2] >= 'a' && p[i2] <= 'z') {
-                char ch = p[i2];
-                if (p[i2] != s[i1]) { return false; }
-                i1 += 1;
-                i2 += 1;
             }
         }
 
-        if (i1 < s.size() || i2 < p.size()) { return false; }
-        return true;
+        return dp[m][n];
+    }
+
+    bool matches(char s, char p) {
+        if ('.' == p) { return true; }
+        return s == p;
     }
 };
 // @lc code=end
-
