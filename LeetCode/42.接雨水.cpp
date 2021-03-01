@@ -7,28 +7,25 @@
 // @lc code=start
 class Solution {
 public:
+    // 双指针
     int trap(vector<int>& height) {
-        int n = height.size();
-        if (0 == n || 1 == n) { return 0; }
+        int left = 0, right = height.size() - 1;
+        int ans = 0;
+        int left_max = 0, right_max = 0;
 
-        vector l_maxs(n, 0);
-        vector r_maxs(n, 0);
-
-        l_maxs[0] = height[0];
-        for (int i = 1; i < n; i++) {
-            l_maxs[i] = max(l_maxs[i-1], height[i]);
-        }
-        r_maxs[n-1] = height[n-1];
-        for (int i = n-2; i >= 0; i--) {
-            r_maxs[i] = max(r_maxs[i+1], height[i]);
-        }
-
-        int res = 0;
-        for (int i = 0; i < n; i++) {
-            res += min(l_maxs[i], r_maxs[i]) - height[i];
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= left_max) { left_max = height[left]; }
+                else { ans += (left_max - height[left]); }
+                left += 1;
+            } else {
+                if (height[right] >= right_max) { right_max = height[right]; }
+                else { ans += (right_max - height[right]); }
+                right -= 1;
+            }
         }
 
-        return res;
+        return ans;
     }
 };
 // @lc code=end
