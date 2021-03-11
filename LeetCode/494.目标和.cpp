@@ -7,32 +7,21 @@
 // @lc code=start
 class Solution {
 public:
-    int ans = 0;
-
-    void dfs(vector<int>& nums, int target_s, int cur_id, int cur_s, bool is_add) {
-        if (is_add) {
-            cur_s += nums[cur_id];
-        } else {
-            cur_s -= nums[cur_id];
-        }
-
-        if (cur_id == nums.size()-1) {
-            if (cur_s == target_s) { ans += 1; }
-            return;
-        }
-
-        dfs(nums, target_s, cur_id+1, cur_s, true);
-        dfs(nums, target_s, cur_id+1, cur_s, false);
-    }
-
-
     int findTargetSumWays(vector<int>& nums, int S) {
-        if (nums.size() == 0) {
-            return 0;
+        vector<vector<int>> dp(nums.size()+1, vector<int>(2002, 0));
+        
+        dp[0][nums[0] + 1000] += 1;
+        dp[0][-nums[0] + 1000] += 1;
+        for (int i = 1; i < nums.size(); i++) {
+            for (int j = -1000; j <= 1000; j++) {
+                if (dp[i-1][j+1000] > 0) {
+                    dp[i][j+nums[i]+1000] += dp[i-1][j+1000];
+                    dp[i][j-nums[i]+1000] += dp[i-1][j+1000];
+                }
+            }
         }
-        dfs(nums, S, 0, 0, true);
-        dfs(nums, S, 0, 0, false);
-        return ans;
+
+        return S > 1000 ? 0 : dp[nums.size()-1][S+1000];
     }
 };
 // @lc code=end
