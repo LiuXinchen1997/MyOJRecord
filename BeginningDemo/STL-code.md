@@ -325,6 +325,98 @@ int main()
 }
 ```
 
+6. 类型转换
+
+```c++
+// 字符和数字之间的转化
+// clang++ 7.0.1
+
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    /// char -> int
+    char numChar = '9';
+    cout << "char -> int" << endl << static_cast<int>(numChar - 48) << endl << endl;
+    // int = char - 48
+
+    /// int -> char
+    int numInt = 4;
+    cout << "int -> char" << endl << static_cast<char>(numInt + 48) << endl << endl;
+
+    /// char* -> int
+    const char* charGroup = "123";
+    cout << "char* -> int" << endl << atoi(charGroup) << endl << endl;
+
+    /// int -> char*
+    numInt = 123;
+    auto charGroup2 = to_string(numInt).c_str();
+    cout << "int -> char*" << endl << charGroup2 << endl << endl;
+
+    /// char* -> double
+    const char* charGroup3 = "123.123";
+    cout << "char* -> double" << endl << atof(charGroup3) << endl << endl;
+
+    /// double -> char*
+    double numDouble = 123.123;
+    const char* charGroup4 = to_string(numDouble).c_str();
+    cout << "double -> char*" << endl << charGroup4 << endl << endl;
+
+    /// string -> int/double
+    string numStr = "666";
+    cout << "string -> int/double" << endl << stoi(numStr) << endl << endl;
+    // double 用 stod()
+
+    /// int/double -> string
+    double numDouble2 = 123.123;
+    cout << "int/double -> string" << endl << to_string(numDouble2) << endl << endl;
+
+    /// string -> char*
+    string str = "ganlerkiller";
+    cout << "string -> char[]" << endl << str.c_str() << endl << endl;
+
+    /// char* -> string
+    const char* cstr = "ganlerganler";
+    string str2(cstr);
+    cout << "char* -> string" << endl << cstr << endl << endl;
+}
+
+/*
+char -> int
+9
+
+int -> char
+4
+
+char* -> int
+123
+
+int -> char*
+123
+
+char* -> double
+123.123
+
+double -> char*
+123.123000
+
+string -> int/double
+666
+
+int/double -> string
+123.123000
+
+string -> char[]
+ganlerkiller
+
+char* -> string
+ganlerganler
+*/
+```
+
+此外，还有`to_string`!!!
+
 ## 二 图论算法
 
 1. dfs
