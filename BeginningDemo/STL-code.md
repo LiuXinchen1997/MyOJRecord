@@ -712,7 +712,7 @@ int main()
 }
 ```
 
-5. disset
+5. disset（并查集）
 
 ```c++
 #include <iostream>
