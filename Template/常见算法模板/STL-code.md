@@ -2,18 +2,51 @@
 
 [TOC]
 
-## 一 STL some demos
+## 1 sort
 
-1. sort
+第一种写法：
 
 ```c++
-#include <cstdio>
-#include <vector>
-#include <algorithm>
-#include <iostream>
+struct Point {
+    int x, y;
+    Point(int _x, int _y) : x(_x), y(_y) {};
+};
 
-using namespace std;
+int main()
+{
+    vector<Point> points;
+    sort(points.begin(), points.end(), [](const Point& p1, const Point& p2) {
+         if (p1.x < p2.x) { return true; }
+         else if (p1.x == p2.x && p1.y < p2.y) { return true; }
+         return false;
+    });
+}
+```
 
+第二种写法：
+
+```c++
+struct Point {
+    int x, y;
+    Point(int _x, int _y) : x(_x), y(_y) {};
+
+    bool operator< (const Point& p) {
+        if (x < p.x) { return true; }
+        else if (x == p.x && y < p.y) { return true; }
+        return false;
+    }
+};
+
+int main()
+{
+    vector<Point> points;
+    sort(points.begin(), points.end());
+}
+```
+
+第三种写法：
+
+```c++
 struct Point {
     int x, y;
     Point() {}
@@ -40,47 +73,18 @@ bool myfunction(const Point& p1, const Point& p2)
     return flag;
 }
 
-ostream& operator<< (ostream& os, Point& p)
-{
-    os << p.x << " " << p.y << endl;
-    return os;
-}
-
 int main()
 {
     vector<Point> vs;
-    vs.push_back(Point(7,4));
-    vs.push_back(Point(4,4));
-    vs.push_back(Point(5,3));
-    vs.push_back(Point(5,2));
-    vs.push_back(Point(8,2));
-    vs.push_back(Point(1,5));
-    vs.push_back(Point(2,4));
-    vs.push_back(Point(3,2));
-    vs.push_back(Point(3,4));
 
     sort(vs.begin(), vs.end(), mycomp);
-    for (int i = 0; i < vs.size(); i++) {
-        cout << vs[i] << endl;
-    }
-
-    cout << "-------------------------------" << endl;
-
     sort(vs.begin(), vs.end(), myfunction);
-    for (int i = 0; i < vs.size(); i++) {
-        cout << vs[i] << endl;
-    }
 }
 ```
 
-2. sort_2
+第四种写法：
 
 ```c++
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
 struct Point {
     int x, y;
     Point() {}
@@ -105,35 +109,14 @@ bool myfunc(const Point& p1, const Point& p2)
     return true;
 }
 
-ostream& operator<< (ostream& os, const Point& p)
-{
-    os << "(" << p.x << ", " << p.y << ")";
-    return os;
-}
-
 int main()
 {
     vector<Point> vps;
-    vps.push_back(Point(5,4));
-    vps.push_back(Point(7,3));
-    vps.push_back(Point(7,1));
-    vps.push_back(Point(3,4));
-    vps.push_back(Point(2,0));
-    vps.push_back(Point(6,4));
-    vps.push_back(Point(3,4));
-    vps.push_back(Point(2,7));
-    vps.push_back(Point(1,2));
     sort(vps.begin(), vps.end(), myfunc);
-
-    for (vector<Point>::iterator it = vps.begin(); it < vps.end(); it++) {
-        cout << *it << endl;
-    }
-
-    return 0;
 }
 ```
 
-3. map
+## 2 map
 
 ```c++
 #include <map>
@@ -151,13 +134,6 @@ struct Point {
         else if (this->x == p.x && this->y < p.y) { return true; }
         return false;
     }
-    /*
-    bool operator== (const Point& p)
-    {
-        if (this->x == p.x && this->y == p.y) { return true; }
-        return false;
-    }
-    */
 };
 
 bool mycomp(const Point& p1, const Point& p2)
@@ -198,7 +174,7 @@ int main()
 }
 ```
 
-4. set
+## 3 set
 
 ```c++
 #include <iostream>
@@ -255,7 +231,7 @@ int main()
 }
 ```
 
-5. priority_queue
+## 4 priority_queue
 
 ```c++
 #include <iostream>
@@ -325,7 +301,7 @@ int main()
 }
 ```
 
-6. 类型转换
+## 5 类型转换
 
 ```c++
 // 字符和数字之间的转化
@@ -415,521 +391,12 @@ ganlerganler
 */
 ```
 
-此外，还有`to_string`!!!
+此外，还有万能转换法：`to_string()`!!!
 
-## 二 图论算法
 
-1. dfs
+## 6 string
 
-```c++
-#include <cstdio>
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-#define N 10005
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
-
-int n;
-vector<int> G[N];
-int color[N], d[N], f[N], tt;
-
-void dfs_visit(int u)
-{
-    color[u] = GRAY;
-    d[u] = ++tt;
-    int v;
-    for (int i = 0; i < G[u].size(); i++) {
-        if (color[G[u][i]] == WHITE) { dfs_visit(G[u][i]); }
-    }
-    color[u] = BLACK;
-    f[u] = ++tt;
-}
-
-void dfs()
-{
-    // init
-    tt = 0;
-    for (int i = 1; i <= n; i++) {
-        color[i] = WHITE;
-    }
-
-    for (int i = 1; i <= n; i++) {
-        if (color[i] == WHITE) { dfs_visit(i); }
-    }
-
-    for (int i = 1; i <= n; i++) {
-        printf("%d %d %d\n", i, d[i], f[i]);
-    }
-}
-
-int main()
-{
-    scanf("%d", &n);
-    for (int i = 1; i <= n; i++) {
-        int u, k;
-        scanf(" %d %d", &u, &k);
-        for (int j = 1; j <= k; j++) {
-            int v; scanf(" %d", &v);
-            G[u].push_back(v);
-        }
-    }
-
-    dfs();
-
-    return 0;
-}
-```
-
-2. bfs
-
-```c++
-#include <cstdio>
-#include <iostream>
-#include <vector>
-#include <queue>
-
-using namespace std;
-
-#define N 1005
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
-vector<int> G[N];
-
-int color[N], d[N];
-int n;
-
-void bfs(int s)
-{
-    // init
-    for (int i = 1; i <= n; i++) {
-        color[i] = WHITE;
-        d[i] = -1;
-    }
-
-    queue<int> q;
-    q.push(s);
-    d[s] = 0;
-
-    while (!q.empty()) {
-        int u = q.front(); q.pop();
-        for (int i = 0; i < G[u].size(); i++) {
-            int v = G[u][i];
-            if (color[v] == WHITE) {
-                // visit!
-                color[v] = GRAY;
-                d[v] = d[u] + 1;
-                q.push(v);
-            }
-        }
-        color[u] = BLACK;
-    }
-
-    for (int i = 1; i <= n; i++) {
-        cout << i << " " << d[i] << endl;
-    }
-}
-
-int main()
-{
-    scanf("%d", &n);
-    for (int i = 1; i <= n; i++) {
-        int u, k;
-        scanf(" %d %d", &u, &k);
-        for (int j = 1; j <= k; j++) {
-            int v;
-            scanf(" %d", &v);
-            G[u].push_back(v);
-            G[v].push_back(u);
-        }
-    }
-
-    bfs(1);
-
-    return 0;
-}
-```
-
-3. prim
-
-```c++
-#include <cstdio>
-#include <iostream>
-
-using namespace std;
-
-#define N 1005
-#define INF (1<<30)
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
-
-int graph[N][N];
-int n;
-
-int prim(int s)
-{
-    // init
-    int color[N], d[N], f[N];
-    for (int i = 1; i <= n; i++) {
-        color[i] = WHITE;
-        d[i] = INF;
-        f[i] = -1;
-    }
-    d[s] = 0;
-    color[s] = GRAY;
-
-    while (1) {
-        int u = -1;
-        int minu = INF;
-        for (int v = 1; v <= n; v++) {
-            if (color[v] != BLACK && d[v] < minu) {
-                u = v;
-                minu = d[v];
-            }
-        }
-        if (u == -1) { break; }
-        color[u] = BLACK;
-
-        for (int v = 1; v <= n; v++) {
-            if (graph[u][v] != -1 && color[v] != BLACK && graph[u][v] < d[v]) {
-                d[v] = graph[u][v];
-                f[v] = u;
-                color[v] = GRAY;
-            }
-        }
-    }
-
-    int sum = 0;
-    for (int i = 1; i <= n; i++) {
-        if (f[i] != -1) {
-            sum += graph[f[i]][i];
-        }
-    }
-    printf("%d\n", sum);
-}
-
-int main()
-{
-    scanf("%d", &n);
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            scanf(" %d", &graph[i][j]);
-        }
-    }
-
-    prim(1);
-
-    return 0;
-}
-```
-
-4. dijkstra
-
-```c++
-#include <cstdio>
-#include <iostream>
-
-using namespace std;
-
-#define N 1005
-#define INF (1<<30)
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
-
-int n;
-int graph[N][N];
-int color[N], d[N], f[N];
-
-void dijkstr(int s)
-{
-    // init
-    for (int i = 0; i < n; i++) {
-        color[i] = WHITE;
-        d[i] = INF;
-        f[i] = -1;
-    }
-
-    d[s] = 0;
-    color[s] = GRAY;
-    while (1) {
-        int u = -1;
-        int minu = INF;
-        for (int i = 0; i < n; i++) {
-            if (color[i] != BLACK && d[i] < minu) {
-                u = i;
-                minu = d[i];
-            }
-        }
-
-        if (-1 == u) { break; }
-        color[u] = BLACK;
-        for (int v = 0; v < n; v++) {
-            if (color[v] != BLACK && graph[u][v] != INF) {
-                if (d[u] + graph[u][v] < d[v]) {
-                    d[v] = d[u] + graph[u][v];
-                    f[v] = u;
-                    color[v] = GRAY;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        printf("%d %d\n", i, d[i]);
-    }
-}
-
-int main()
-{
-    scanf("%d", &n);
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j <= n; j++) {
-            graph[i][j] = INF;
-        }
-    }
-
-    for (int i = 0; i < n; i++) {
-        int u, k;
-        scanf(" %d %d", &u, &k);
-
-        for (int j = 1; j <= k; j++) {
-            int v, w;
-            scanf(" %d %d", &v, &w);
-            graph[u][v] = w;
-            graph[v][u] = w;
-        }
-    }
-
-    dijkstr(0);
-
-    return 0;
-}
-```
-
-5. disset（并查集）
-
-```c++
-#include <iostream>
-#include <cstdio>
-
-using namespace std;
-
-#define N 1005
-
-int f[N];
-int rankk[N];
-int n, m;
-
-void make_set(int n)
-{
-    for (int i = 0; i < n; i++) {
-        f[i] = i;
-        rankk[i] = 1;
-    }
-}
-
-int find_f(int i)
-{
-    if (i != f[i]) {
-        f[i] = find_f(f[i]);
-    }
-
-    return f[i];
-}
-
-void union_set(int x, int y)
-{
-    x = find_f(x);
-    y = find_f(y);
-    if (rankk[x] < rankk[y]) {
-        f[x] = y;
-    } else {
-        f[y] = x;
-        if (rankk[x] == rankk[y]) {
-            rankk[x]++;
-        }
-    }
-}
-
-bool same(int x, int y)
-{
-    return find_f(x) == find_f(y);
-}
-
-int main()
-{
-    scanf("%d %d", &n, &m);
-
-    // init
-    make_set(n);
-
-    for (int i = 1; i <= m; i++) {
-        int type, x, y;
-        scanf(" %d %d %d", &type, &x, &y);
-        if (0 == type) {
-            union_set(x, y);
-        } else {
-            if (same(x, y)) {
-                printf("%d\n", 1);
-            } else {
-                printf("%d\n", 0);
-            }
-        }
-    }
-
-    return 0;
-}
-```
-
-6. floyd
-
-```c++
-#include <cstdio>
-#include <iostream>
-
-using namespace std;
-
-#define N 1005
-#define INF (1<<30)
-int graph[N][N];
-int n, e;
-
-void floyd()
-{
-    for (int k = 1; k <= n; k++) {
-        for (int i = 1; i <= n; i++) {
-            if (graph[i][k] == INF) { continue; }
-            for (int j = 1; j <= n; j++) {
-                if (graph[k][j] == INF) { continue; }
-                if (graph[i][k] + graph[k][j] < graph[i][j]) {
-                    graph[i][j] = graph[i][k] + graph[k][j];
-                }
-            }
-        }
-    }
-}
-
-int main()
-{
-    scanf("%d %d", &n, &e);
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            graph[i][j] = (i == j ? 0 : INF);
-        }
-    }
-
-    for (int i = 1; i <= e; i++) {
-        int u, v, w;
-        scanf(" %d %d %d", &u, &v, &w);
-        graph[u][v] = w;
-    }
-
-    floyd();
-
-    bool flag = false;
-    for (int i = 1; i <= n; i++) {
-        if (graph[i][i] < 0) { flag = true; break; }
-    }
-
-    if (flag) { cout << "NEG!" << endl; }
-    else {
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (j-1) { cout << " "; }
-                if (graph[i][j] == INF) {
-                    cout << "INF";
-                } else {
-                    cout << graph[i][j];
-                }
-            }
-            cout << endl;
-        }
-    }
-
-    return 0;
-}
-```
-
-7. topo sort
-
-```c++
-
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <vector>
-
-using namespace std;
-
-#define N 1005
-
-int n, e;
-vector<int> G[N];
-int ind[N];
-bool visited[N];
-vector<int> out;
-
-void topo()
-{
-    out.clear();
-    memset(visited, 0, sizeof(visited));
-
-    while (out.size() != n) {
-        int u = -1;
-        for (int i = 0; i < n; i++) {
-            if (!visited[i] && ind[i] == 0) {
-                out.push_back(i);
-                u = i;
-                visited[i] = true;
-
-                for (int j = 0; j < G[i].size(); j++) {
-                    int v = G[i][j];
-                    ind[v]--;
-                }
-                break;
-            }
-        }
-
-        if (-1 == u) { break; }
-    }
-
-    for (int i = 0; i < out.size(); i++) {
-        if (i) { cout << " "; }
-        cout << out[i];
-    }
-    cout << endl;
-}
-
-
-int main()
-{
-    scanf("%d %d", &n, &e);
-    memset(ind, 0, sizeof(ind));
-
-    for (int i = 0; i < e; i++) {
-        int u, v;
-        scanf(" %d %d", &u, &v);
-        G[u].push_back(v);
-        ind[v]++;
-    }
-
-    topo();
-
-    return 0;
-}
-```
-
-## 三 STL API
-
-### 1 **string**
-
-#### 1.1 基本
+### 6.1 基本
 
 1. constructor
 
@@ -978,7 +445,7 @@ s6: xxxxxxxxxx
 s7a: **********s
 7b: Init
 
-#### 1.2 Iterator
+### 6.2 Iterator
 
 1. rbegin
 
@@ -1003,7 +470,7 @@ int main ()
 }
 ```
 
-#### 1.3 Capacity
+### 6.3 Capacity
 
 1. resize
 
@@ -1040,7 +507,7 @@ int main ()
 }
 ```
 
-#### 1.4 Modifiers
+### 6.4 Modifiers
 
 1. assign
 
@@ -1252,7 +719,7 @@ int main ()
 }
 ```
 
-#### 1.5 String operations
+### 6.5 String operations
 
 1. find
 
@@ -1535,7 +1002,7 @@ int main ()
 }
 ```
 
-### **2 stack**
+## 7 stack
 
 size empty top push pop
 
@@ -1573,7 +1040,7 @@ int main ()
 }
 ```
 
-### **3 queue**
+## 8 queue
 
 size empty front back push pop
 
@@ -1611,7 +1078,7 @@ int main ()
 }
 ```
 
-### **4 priority_queue**
+## 9 priority_queue
 
 size empty top push pop
 
@@ -1664,9 +1131,9 @@ int main ()
 }
 ```
 
-### **5 set**
+## 10 set
 
-#### 5.1 member functions
+### 10.1 member functions
 
 1. constructor
 
@@ -1712,7 +1179,7 @@ int main ()
 }
 ```
 
-#### 5.2 Iterator
+### 10.2 Iterator
 
 1. begin / end
 
@@ -1764,7 +1231,7 @@ int main ()
 }
 ```
 
-#### 5.3 Modifier
+### 10.3 Modifier
 
 1. insert
 
@@ -1851,7 +1318,7 @@ int main ()
 }
 ```
 
-#### 5.4 Observers
+### 10.4 Observers
 
 1. key_comp
 
@@ -1927,7 +1394,7 @@ int main ()
 }
 ```
 
-#### 5.5 Operations
+### 10.5 Operations
 
 1. find
 
@@ -2073,9 +1540,9 @@ int main ()
 }
 ```
 
-### **6 map**
+## 11 map
 
-#### 6.1 Member functions
+### 11.1 Member functions
 
 1. constructor
 
@@ -2123,7 +1590,7 @@ int main ()
 }
 ```
 
-#### 6.2 Iterators
+### 11.2 Iterators
 
 1. begin
 
@@ -2185,7 +1652,7 @@ int main ()
 }
 ```
 
-#### 6.3 Modifiers
+### 11.3 Modifiers
 
 1. insert
 
@@ -2283,7 +1750,7 @@ int main ()
 }
 ```
 
-#### 6.4 Observers
+### 11.4 Observers
 
 1. key_comp
 
@@ -2360,7 +1827,7 @@ int main ()
 }
 ```
 
-#### 6.5 Operations
+### 11.5 Operations
 
 1. find
 
@@ -2542,9 +2009,9 @@ int main ()
 }
 ```
 
-### **7 vector**
+## 12 vector
 
-#### 7.1 Modifiers
+### 12.1 Modifiers
 
 1. assign
 
@@ -2661,9 +2128,9 @@ int main ()
 }
 ```
 
-### **8 list**
+## 13 list
 
-#### 8.1 Modifiers
+### 13.1 Modifiers
 
 1. insert
 
@@ -2759,7 +2226,7 @@ int main ()
 }
 ```
 
-#### 8.2 Operations
+### 13.2 Operations
 
 1. splice
 
@@ -3069,7 +2536,7 @@ int main ()
 }
 ```
 
-### **9 cstdio**
+## 14 cstdio
 
 1. sprintf & sscanf
 
@@ -3111,9 +2578,9 @@ printf("host: %s\n", host);
 printf("port: %s\n", port);
 ```
 
-### **10 cstring**
+## 15 cstring
 
-#### 10.1 Copying
+### 15.1 Copying
 
 1. memcpy
 
@@ -3180,7 +2647,7 @@ int main ()
 }
 ```
 
-#### 10.2 Concatenation
+### 15.2 Concatenation
 
 1. strcat
 
@@ -3227,7 +2694,7 @@ int main ()
 }
 ```
 
-#### 10.3 Comparison
+### 15.3 Comparison
 
 1. strcmp
 
@@ -3256,7 +2723,7 @@ int main ()
 }
 ```
 
-#### 10.4 Searching
+### 15.4 Searching
 
 1. strchr
 

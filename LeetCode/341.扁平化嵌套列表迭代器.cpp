@@ -24,17 +24,32 @@
  */
 
 class NestedIterator {
+private:
+    vector<int> vals;
+    int cur_id = 0;
+
+    void dfs(const vector<NestedInteger>& nestedList) {
+        for (auto ele : nestedList) {
+            if (ele.isInteger()) {
+                vals.push_back(ele.getInteger());
+            } else {
+                dfs(ele.getList());
+            }
+        }
+    }
+
 public:
     NestedIterator(vector<NestedInteger> &nestedList) {
-        
+        dfs(nestedList);
     }
     
     int next() {
-        
+        cur_id += 1;
+        return vals[cur_id-1];
     }
     
     bool hasNext() {
-        
+        return cur_id != vals.size();
     }
 };
 
