@@ -22,7 +22,7 @@ void update(int pos, int val)
     pos += len;
     tree[pos] = val;
     pos /= 2;
-    while (pos > 0) {
+    while (pos > 0) { // tree[0]是多余的
         tree[pos] = tree[2*pos] + tree[2*pos+1];
         pos /= 2;
     }
